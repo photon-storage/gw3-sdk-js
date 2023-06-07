@@ -3,13 +3,6 @@ import type { IsEqual, SetRequired } from 'type-fest'
 
 import { sign } from './utils'
 
-export const apiBaseUrl = import.meta.env.WEB_API_BASE
-
-export const apiClient = axios.create({
-  baseURL: apiBaseUrl,
-  timeout: 1000 * 60 * 5,
-})
-
 type TRes<T> = {
   code: number
   msg?: string
@@ -26,27 +19,16 @@ export interface PhotonListRes<T = any> {
   total: number
 }
 
-apiClient.interceptors.request.use((config) => {
-  const token = getToken()
-  if (token) {
-    config.headers = {
-      ...config.headers,
-      authorization: token,
-    }
-  }
+const timeout = 1000 * 60 * 5
 
-  return config
-})
-
-apiClient.interceptors.response.use(
-  (res) => {
-    if (res.data?.code === 2004) {
-      removeToken()
-    }
-
-    return res
-  },
-  async (err) => {
-      throw err
-  },
-)
+export function getUploadUrl(baseURL: string, key: string, secret: string) {
+  const url = 'xxx'
+  return axios.get(url, {
+    baseURL,
+    headers: {
+      'X-Access-Key': key,
+      'X-Access-Signature': sign('GET', url, secret),
+    },
+    timeout,
+  })
+}
