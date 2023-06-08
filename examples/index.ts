@@ -14,7 +14,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   </div>
 `
 
-document.querySelector('#submit')!.addEventListener('click', () => {
+document.querySelector('#submit')!.addEventListener('click', async () => {
   const file = document.querySelector<HTMLInputElement>('#upload')!.files![0]
   if (!file) {
     alert('please select a file')
@@ -27,11 +27,15 @@ document.querySelector('#submit')!.addEventListener('click', () => {
   const secret = 'this is a secret'
 
   const config = {
-    baseURL: 'http://localhost:8080/api/starbase',
+    baseURL: 'https://gw3.io',
   }
 
   const client = new Client(key, secret, config)
-  client.uploadFile(file).then((cid) => {
-    console.log(cid)
-  })
+  const cid = await client.uploadFile(file)
+
+  const resData = await client.addPin(cid)
+
+    if (resData.code === 200) {
+      alert('success')
+    }
 })

@@ -1,3 +1,4 @@
+import { resolve } from 'path'
 import { defineConfig } from 'vite'
 
 function onProxyReq(proxyReq) {
@@ -24,5 +25,13 @@ export default defineConfig({
         configure: (proxy) => proxy.on('proxyReq', onProxyReq),
       },
     },
+  },
+
+  build: {
+    lib: {
+      entry: resolve(__dirname, 'lib/main.ts'),
+      name: 'gw3-sdk',
+      fileName: 'gw3-sdk',
+    }
   },
 })

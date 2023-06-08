@@ -22,7 +22,7 @@ export class Client {
     this.key = key
     this.secret = secret
     this.config = config || {
-      baseURL: 'http://starbase.gw3.io',
+      baseURL: 'https://gw3.io',
     }
 
     this.apiClient = createRequestClient(this.config.baseURL, this.key, this.secret)
@@ -30,7 +30,9 @@ export class Client {
 
   async uploadFile(file: File, hooks?: Hooks) {
     try {
-      const url = await this._getIpfsPath(file.size)
+      const {
+        data: { url }
+      }  = await this._getIpfsPath(file.size)
 
       const { headers } = await defaultClient.post(url, file, {
         onUploadProgress: ({ loaded, total }) => {
@@ -76,9 +78,9 @@ export class Client {
     const ipfsUrl = `/ipfs/?size=${size}&ts=${getTs()}`
 
     const {
-      data: { url },
+      data
     } = await this.apiClient.post(ipfsUrl)
 
-    return url
+    return data
   }
 }
