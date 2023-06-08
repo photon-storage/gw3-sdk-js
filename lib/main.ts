@@ -49,6 +49,8 @@ export class Client {
       return cid
     } catch (error: any) {
       hooks?.onError?.(error)
+
+      throw error
     }
   }
 
@@ -80,5 +82,3 @@ export class Client {
     return url
   }
 }
-
-console.log(new Client('key', 'secret'), Client)
