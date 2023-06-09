@@ -1,7 +1,16 @@
 {
-  "name": "gw3-sdk-js",
-  "version": "0.0.0",
+  "name": "@photon-storage/gw3-sdk",
+  "version": "0.1.0",
   "type": "module",
+  "files": ["dist"],
+  "main": "./dist/gw3-sdk.umd.cjs",
+  "module": "./dist/gw3-sdk.js",
+  "exports": {
+    ".": {
+      "import": "./dist/gw3-sdk.js",
+      "require": "./dist/gw3-sdk.umd.cjs"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
