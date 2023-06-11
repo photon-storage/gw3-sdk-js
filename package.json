@@ -1,5 +1,5 @@
 {
-  "name": "@photon-storage/gw3-sdk",
+  "name": "gw3-sdk",
   "version": "0.1.0",
   "type": "module",
   "files": ["dist"],
@@ -27,5 +27,9 @@
     "crypto-browserify": "^3.12.0",
     "crypto-js": "^4.1.1",
     "safe-buffer": "^5.2.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/photon-storage/gw3-sdk-js"
   }
 }
