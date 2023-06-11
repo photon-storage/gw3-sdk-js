@@ -1,7 +1,7 @@
-# JS SDK
+# gw3 SDK
 
 ```ts
-import { Client } from '@photon-storage/gw3-sdk'
+import { Client } from 'gw3-sdk'
 ```
 
 ## class Client
