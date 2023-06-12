@@ -1,32 +1,57 @@
-# gw3 SDK
+# gw3-sdk-js
+
+This repository contains the JavaScript SDK for [Gateway3](https://gw3.io), an decentralized IPFS gateway. The Gateway3 SDK provides a simple and easy-to-use interface to interact with IPFS, enabling developers to build scalable and distributed applications.
+
+## Requirements
+
+- Node.js v14.0.0 or above, or modern web browsers (Chrome 60+, Firefox 53+, Safari 10.1+, Edge 15+)
+- Access key and secret from [Gateway3](https://gw3.io)
+
+## Installation
+
+To install the IPFS Gateway SDK, use the following command:
+
+```sh
+npm install gw3-sdk
+```
+
+## Usage
+
+Import the IPFS Gateway SDK in your JavaScript project:
 
 ```ts
 import { Client } from 'gw3-sdk'
 ```
 
-## class Client
+Use `new Client` to create a new Gateway3 client with the provided access key and access secret.
 
-Client represents a Gateway3 client for interacting with the Gateway3.
-
-```ts
-class Client {
-  // contains filtered or unexported fields
-}
-```
-
-### constructor
+Here's a simple usage example:
 
 ```ts
-constructor(key: string, secret: string, config?: Config)
+import { Client } from 'gw3-sdk';
 
-interface Config {
-  baseURL: string
-}
+let client = new Client('YOUR-ACCESS-KEY', 'YOUR-ACCESS-SECRET');
+
+// Replace 'YOUR-FILE' with the file you want to upload
+let file = 'YOUR-FILE';
+let hooks = {
+  onProgress: (event) => console.log(`Upload progress: ${event.percent}%`),
+  onSuccess: (body) => {
+    console.log('Upload success', body);
+    // After file is uploaded, pin the file using its CID.
+    client.addPin(body.cid)
+      .then(() => console.log(`File with CID ${body.cid} has been pinned successfully.`))
+      .catch((error) => console.log(`Error in pinning file with CID ${body.cid}:`, error));
+  },
+  onError: (error) => console.log('Upload error', error),
+};
+
+client.uploadFile(file, hooks);
 ```
 
-use `new Client` to create a new Gateway3 client with the provided access key and access secret.
+#### uploadFile
 
-### uploadFile
+Uploads the given data to Gateway3 and returns the corresponding CID. 
 
 ```ts
 async function uploadFile(file: File, hooks?: Hooks)
@@ -41,28 +66,37 @@ interface ProgressEvent {
 }
 ```
 
-uploads the given data to Gateway3 and returns the corresponding CID.
+#### getIpfs
 
-### getIpfs
+Retrieves data from the Gateway3 for the given CID.
 
 ```ts
 async function getIpfs(cid: string)
 ```
 
-Get retrieves data from the Gateway3 for the given CID.
+#### addPin
 
-### addPin
+Requests Gateway3 to pin the given CID.
 
 ```ts
 async function addPin(cid: string)
 ```
 
-Pin requests Gateway3 to pin the given CID.
+#### removePin
 
-### removePin
+Requests Gateway3 to unpin the given CID.
 
 ```ts
 async function removePin(cid: string)
 ```
 
-Unpin requests Gateway3 to unpin the given CID.
+## Support
+
+If you need help with using the SDK, or have any questions or issues, you can:
+
+- Submit an issue on our [GitHub](https://github.com/photon-storage/gw3-sdk-js)
+- Reach out to us directly via [Telegram](https://t.me/gw3_io)
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
