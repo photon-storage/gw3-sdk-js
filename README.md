@@ -1,10 +1,10 @@
 # gw3-sdk-js
 
-This repository contains the JavaScript SDK for [Gateway3](https://gw3.io), an IPFS decentralized gateway. The Gateway3 SDK provides a simple and easy-to-use interface to interact with IPFS, enabling developers to build scalable and distributed applications.
+This repository contains the JavaScript SDK for [Gateway3](https://gw3.io), an decentralized IPFS gateway. The Gateway3 SDK provides a simple and easy-to-use interface to interact with IPFS, enabling developers to build scalable and distributed applications.
 
 ## Requirements
 
-- Node.js v14.0.0 or above
+- Node.js v14.0.0 or above, or modern web browsers (Chrome 60+, Firefox 53+, Safari 10.1+, Edge 15+)
 - Access key and secret from [Gateway3](https://gw3.io)
 
 ## Installation
@@ -95,7 +95,7 @@ async function removePin(cid: string)
 If you need help with using the SDK, or have any questions or issues, you can:
 
 - Submit an issue on our [GitHub](https://github.com/photon-storage/gw3-sdk-js)
-- Contact us directly at [zuriel@photon.storage](mailto:zuriel@photon.storage)
+- Reach out to us directly via [Telegram](https://t.me/gw3_io)
 
 ## License
 
