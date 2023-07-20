@@ -31,8 +31,8 @@ export class Client {
   async uploadFile(file: File, hooks?: Hooks) {
     try {
       const {
-        data: { url }
-      }  = await this._getIpfsPath(file.size)
+        data: { url },
+      } = await this._getIpfsPath(file.size || (file as any).length)
 
       const { headers } = await defaultClient.post(url, file, {
         onUploadProgress: ({ loaded, total }) => {
@@ -44,11 +44,12 @@ export class Client {
         },
       })
       const cid = headers['ipfs-hash']
+      const result = { cid }
 
       hooks?.onProgress?.({ percent: 100 })
-      hooks?.onSuccess?.(cid)
+      hooks?.onSuccess?.(result)
 
-      return cid
+      return result
     } catch (error: any) {
       hooks?.onError?.(error)
 
@@ -77,9 +78,7 @@ export class Client {
   async _getIpfsPath(size: number) {
     const ipfsUrl = `/ipfs/?size=${size}&ts=${getTs()}`
 
-    const {
-      data
-    } = await this.apiClient.post(ipfsUrl)
+    const { data } = await this.apiClient.post(ipfsUrl)
 
     return data
   }

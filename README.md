@@ -54,7 +54,7 @@ client.uploadFile(file, hooks);
 Uploads the given data to Gateway3 and returns the corresponding CID. 
 
 ```ts
-async function uploadFile(file: File, hooks?: Hooks)
+async function uploadFile(file: File, hooks?: Hooks) : Promise<{ cid: string }>
 
 interface Hooks {
   onProgress?: (event: ProgressEvent) => void

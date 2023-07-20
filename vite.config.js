@@ -1,5 +1,7 @@
-import { resolve } from 'path'
+import path from 'path'
 import { defineConfig } from 'vite'
+import resolve from '@rollup/plugin-node-resolve'
+import autoExternal from 'rollup-plugin-auto-external'
 
 function onProxyReq(proxyReq) {
   const sockets = proxyReq.agent.sockets
@@ -29,9 +31,17 @@ export default defineConfig({
 
   build: {
     lib: {
-      entry: resolve(__dirname, 'lib/main.ts'),
+      entry: path.resolve(__dirname, 'lib/main.ts'),
       name: 'gw3-sdk',
       fileName: 'gw3-sdk',
-    }
+      formats: ['es', 'umd', 'cjs'],
+    },
+    rollupOptions: {
+      plugins: [
+        autoExternal(),
+        resolve(),
+      ],
+      external: []
+    },
   },
 })
