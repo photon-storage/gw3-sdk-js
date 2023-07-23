@@ -12,7 +12,7 @@ export const createRequestClient = (baseURL: string, key: string, secret: string
   apiClient.interceptors.request.use((config) => {
     config.headers = {
       'X-Access-Key': key,
-      'X-Access-Signature': sign('POST', config.url!, secret),
+      'X-Access-Signature': sign(config.method?.toUpperCase() as any, config.url!, secret),
     } as any
 
     return config
