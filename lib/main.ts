@@ -57,8 +57,24 @@ export class Client {
     }
   }
 
+  async upload(data: Uint8Array) {
+    const {
+      data: { url },
+    } = await this._getIpfsPath(data.length)
+
+    const { headers } = await defaultClient.post(url, data)
+    const cid = headers['ipfs-hash']
+
+    return cid
+  }
+
   async getIpfs(cid: string) {
-    const url = `/ipfs/${cid}&ts=${getTs()}`
+    const url = `/ipfs/${cid}?ts=${getTs()}`
+    const { data } = await this.apiClient.get(url)
+    return data
+  }
+  async getIpns(name: string) {
+    const url = `/ipns/${name}?ts=${getTs()}`
     const { data } = await this.apiClient.get(url)
     return data
   }
@@ -75,6 +91,61 @@ export class Client {
     return data
   }
 
+  async createIpns(cid: string) {
+    const url = `/api/v0/name/create?arg=${cid}&ts=${getTs()}`
+
+    const { data } = await this.apiClient.post(url)
+
+    return data
+  }
+  async updateIpns(name: string, cid: string) {
+    const url = `/api/v0/name/publish?arg=${cid}&key=${name}&ts=${getTs()}`
+
+    const { data } = await this.apiClient.post(url)
+
+    return data
+  }
+  async importIpns(
+    name: string,
+    value: string,
+    secretKey: string,
+    secretFormat: string,
+    seq: number,
+  ) {
+    const url = `/api/v0/name/import?ts=${getTs()}`
+    const params = { name, value, secret_key: secretKey, format: secretFormat, seq }
+
+    const { data } = await this.apiClient.post(url, JSON.stringify(params))
+
+    return data
+  }
+
+  async dagAdd(root: string, path: string, data: Uint8Array) {
+    const dagAddUrl = `/ipfs/${root}${path}?size=${data.length}&ts=${getTs()}`
+    const {
+      data: {
+        data: { url },
+      },
+    } = await this.apiClient.put(dagAddUrl)
+
+    const { headers } = await this.apiClient.put(url, data)
+    const cid = headers['ipfs-hash']
+
+    return cid
+  }
+  async dagRm(root: string, path: string) {
+    const dagRmUrl = `/ipfs/${root}${path}?ts=${getTs()}`
+    const {
+      data: {
+        data: { url },
+      },
+    } = await this.apiClient.delete(dagRmUrl)
+    const { headers } = await this.apiClient.delete(url)
+    const cid = headers['ipfs-hash']
+
+    return cid
+  }
+
   async _getIpfsPath(size: number) {
     const ipfsUrl = `/ipfs/?size=${size}&ts=${getTs()}`
 
@@ -83,3 +154,5 @@ export class Client {
     return data
   }
 }
+
+export const EMPTY_DAG_ROOT = 'QmUNLLsPACCz1vLxQVkXqqLX5R1X345qqfHbsf67hvA3Nn'
