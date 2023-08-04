@@ -33,7 +33,7 @@ document.querySelector('#submit')!.addEventListener('click', async () => {
   const client = new Client(key, secret, config)
   const { cid } = await client.uploadFile(file)
 
-  const resData = await client.addPin(cid)
+  const resData = await client.addPin(cid, file.name)
 
   if (resData.code === 200) {
     alert('success')

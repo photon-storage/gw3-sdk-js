@@ -79,8 +79,12 @@ export class Client {
     return data
   }
 
-  async addPin(cid: string) {
-    const pinUrl = `/api/v0/pin/add?arg=${cid}&ts=${getTs()}`
+  async addPin(cid: string, name?: string) {
+    let pinUrl = `/api/v0/pin/add?arg=${cid}&ts=${getTs()}`
+    if (name) {
+      pinUrl += `&name=${name}`
+    }
+
     const { data } = await this.apiClient.post(pinUrl)
     return data
   }
