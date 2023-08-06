@@ -150,6 +150,29 @@ export class Client {
     return cid
   }
 
+  async dagImport(file: File) {
+    const size = file.size || (file as any).length
+    const dagImportUrl = `/api/v0/dag/import?size=${size}&ts=${getTs()}`
+    const {
+      data: {
+        data: { url },
+      },
+    } = await this.apiClient.post(dagImportUrl)
+
+    const bodyData = defaultClient.toFormData({ file })
+    const { data } = await defaultClient.post(url, bodyData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    if (data.Stats.BlockCount < 1) {
+      throw 'failed: BlockCount is less than 1'
+    }
+
+    return data
+  }
+
   async _getIpfsPath(size: number) {
     const ipfsUrl = `/ipfs/?size=${size}&ts=${getTs()}`
 
