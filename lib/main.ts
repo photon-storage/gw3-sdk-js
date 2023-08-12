@@ -79,8 +79,12 @@ export class Client {
     return data
   }
 
-  async addPin(cid: string) {
-    const pinUrl = `/api/v0/pin/add?arg=${cid}&ts=${getTs()}`
+  async addPin(cid: string, name?: string) {
+    let pinUrl = `/api/v0/pin/add?arg=${cid}&ts=${getTs()}`
+    if (name) {
+      pinUrl += `&name=${name}`
+    }
+
     const { data } = await this.apiClient.post(pinUrl)
     return data
   }
@@ -144,6 +148,29 @@ export class Client {
     const cid = headers['ipfs-hash']
 
     return cid
+  }
+
+  async dagImport(file: File) {
+    const size = file.size || (file as any).length
+    const dagImportUrl = `/api/v0/dag/import?size=${size}&ts=${getTs()}`
+    const {
+      data: {
+        data: { url },
+      },
+    } = await this.apiClient.post(dagImportUrl)
+
+    const bodyData = defaultClient.toFormData({ file })
+    const { data } = await defaultClient.post(url, bodyData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+
+    if (data.Stats.BlockCount < 1) {
+      throw 'failed: BlockCount is less than 1'
+    }
+
+    return data
   }
 
   async _getIpfsPath(size: number) {
